@@ -31,9 +31,7 @@
 
 
 Network::Network(const Options *options) :
-    m_donateActive(false),
     m_options(options),
-    m_donate(nullptr),
     m_accepted(0),
     m_rejected(0)
 {

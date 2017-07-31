@@ -55,7 +55,6 @@ Options::Options(int argc, char **argv) :
     m_logFile(nullptr),
     m_algo(0),
     m_algoVariant(0),
-    m_donateLevel(1),
     m_printTime(60),
     m_retries(5),
     m_retryPause(5),

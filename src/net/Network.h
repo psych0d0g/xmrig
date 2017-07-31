@@ -57,9 +57,7 @@ protected:
 private:
   void setJob(Client *client, const Job &job);
 
-  bool m_donateActive;
   const Options *m_options;
-  IStrategy *m_donate;
   IStrategy *m_strategy;
   uint64_t m_accepted;
   uint64_t m_rejected;

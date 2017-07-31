@@ -27,8 +27,6 @@ set(HEADERS
     src/net/Network.h
     src/net/SubmitResult.h
     src/net/Url.h
-    src/net/strategies/DonateStrategy.h
-    src/net/strategies/FailoverStrategy.h
     src/net/strategies/SinglePoolStrategy.h
     src/Options.h
     src/workers/Handle.h
@@ -61,8 +59,6 @@ set(SOURCES
     src/net/Job.cpp
     src/net/Network.cpp
     src/net/Url.cpp
-    src/net/strategies/DonateStrategy.cpp
-    src/net/strategies/FailoverStrategy.cpp
     src/net/strategies/SinglePoolStrategy.cpp
     src/Options.cpp
     src/workers/Handle.cpp

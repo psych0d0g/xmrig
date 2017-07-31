@@ -61,7 +61,6 @@ public:
     inline const std::vector<Url*> &pools() const { return m_pools; }
     inline int algo() const                       { return m_algo; }
     inline int algoVariant() const                { return m_algoVariant; }
-    inline int donateLevel() const                { return m_donateLevel; }
     inline int printTime() const                  { return m_printTime; }
     inline int retries() const                    { return m_retries; }
     inline int retryPause() const                 { return m_retryPause; }
@@ -97,7 +96,6 @@ private:
     char *m_logFile;
     int m_algo;
     int m_algoVariant;
-    int m_donateLevel;
     int m_printTime;
     int m_retries;
     int m_retryPause;
