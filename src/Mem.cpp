@@ -27,7 +27,6 @@
 
 #include "crypto/CryptoNight.h"
 #include "Mem.h"
-#include "Options.h"
 
 bool Mem::m_doubleHash = false;
 int Mem::m_algo        = 0;
@@ -39,11 +38,6 @@ uint8_t *Mem::m_memory = nullptr;
 
 cryptonight_ctx *Mem::create(int threadId)
 {
-#   ifndef XMRIG_NO_AEON
-    /*if (m_algo == Options::ALGO_CRYPTONIGHT_LITE) {
-        return createLite(threadId);
-    }*/
-#   endif
     const int ratio = 1; //m_doubleHash ? 2 : 1;
 
     cryptonight_ctx *ctx = reinterpret_cast<cryptonight_ctx *>(&m_memory[MEMORY - sizeof(cryptonight_ctx) * (threadId + 1)]);

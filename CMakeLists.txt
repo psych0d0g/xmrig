@@ -1,67 +1,13 @@
 cmake_minimum_required(VERSION 3.0)
 project(xmrix)
-
-option(WITH_LIBCPUID "Use Libcpuid" ON)
 option(WITH_AEON     "CryptoNight-Lite support" ON)
-
-
 include (CheckIncludeFile)
-
-
-set(HEADERS
-    src/3rdparty/align.h
-    src/App.h
-    src/interfaces/IClientListener.h
-    src/interfaces/IJobResultListener.h
-    src/interfaces/ILogBackend.h
-    src/interfaces/IStrategy.h
-    src/interfaces/IStrategyListener.h
-    src/interfaces/IWorker.h
-    src/Mem.h
-    src/net/Client.h
-    src/net/Job.h
-    src/net/JobResult.h
-    src/net/Network.h
-    src/net/SubmitResult.h
-    src/net/Url.h
-    src/net/strategies/SinglePoolStrategy.h
-    src/Options.h
-    src/workers/Handle.h
-    src/workers/SingleWorker.h
-    src/workers/Worker.h
-    src/workers/Workers.h
-   )
-
-set(HEADERS_CRYPTO
-    src/crypto/c_blake256.h
-    src/crypto/c_groestl.h
-    src/crypto/c_jh.h
-    src/crypto/c_keccak.h
-    src/crypto/c_skein.h
-    src/crypto/CryptoNight.h
-    src/crypto/CryptoNight_p.h
-    src/crypto/CryptoNight_test.h
-    src/crypto/groestl_tables.h
-    src/crypto/hash.h
-    src/crypto/skein_port.h
-   )
-
+set(HEADERS)
+set(HEADERS_CRYPTO)
 set(SOURCES
-    src/App.cpp
     src/Mem.cpp
-    src/net/Client.cpp
-    src/net/Job.cpp
-    src/net/Network.cpp
-    src/net/Url.cpp
-    src/net/strategies/SinglePoolStrategy.cpp
-    src/Options.cpp
-    src/workers/Handle.cpp
-    src/workers/SingleWorker.cpp
-    src/workers/Worker.cpp
-    src/workers/Workers.cpp
     src/xmrig.cpp
-   )
-
+)
 set(SOURCES_CRYPTO
     src/crypto/c_keccak.c
     src/crypto/c_groestl.c
@@ -69,77 +15,23 @@ set(SOURCES_CRYPTO
     src/crypto/c_jh.c
     src/crypto/c_skein.c
     src/crypto/CryptoNight.cpp
-   )
-
-    set(SOURCES_OS
-        src/Mem_unix.cpp
-        )
-
-    set(EXTRA_LIBS pthread)
-
+)
+set(SOURCES_OS
+	src/Mem_unix.cpp
+)
+set(EXTRA_LIBS pthread)
 add_definitions(/DUNICODE)
-#add_definitions(/DAPP_DEBUG)
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
-
-find_package(UV REQUIRED)
-
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    set(CMAKE_BUILD_TYPE Release)
-endif()
-
-
-# https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html
-if (CMAKE_CXX_COMPILER_ID MATCHES GNU)
-
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -maes -Wall -Wno-strict-aliasing")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Ofast -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2")
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes -Wall -std=c++14 -fno-exceptions -fno-rtti")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -s -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2")
-
-    if (WIN32)
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
-        add_definitions(/D__STDC_FORMAT_MACROS)
-    else()
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
-    endif()
-
-    add_definitions(/D_GNU_SOURCE)
-
-    #set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -gdwarf-2")
-
-elseif (CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Ox /Ot /Oi /MT /GL")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Ot /Oi /MT /GL")
-
-elseif (CMAKE_CXX_COMPILER_ID MATCHES Clang)
-
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -maes -Wall")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Ofast -funroll-loops -fmerge-all-constants")
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes -Wall -std=c++14 -fno-exceptions -fno-rtti")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -funroll-loops -fmerge-all-constants")
-
-endif()
-
-if (WITH_LIBCPUID)
-    add_subdirectory(src/3rdparty/libcpuid)
-
-    include_directories(src/3rdparty/libcpuid)
-    set(CPUID_LIB cpuid)
-else()
-    add_definitions(/DXMRIG_NO_LIBCPUID)
-endif()
-
-
+set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -maes -Wall -Wno-strict-aliasing")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Ofast -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes -Wall -std=c++14 -fno-exceptions -fno-rtti")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -s -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+add_definitions(/D_GNU_SOURCE)
 include_directories(src)
 include_directories(src/3rdparty)
 include_directories(src/3rdparty/jansson)
-include_directories(${UV_INCLUDE_DIR})
-
 add_subdirectory(src/3rdparty/jansson)
-
 add_executable(xmrig ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO})
-target_link_libraries(xmrig jansson ${UV_LIBRARIES} ${EXTRA_LIBS} ${CPUID_LIB})
+target_link_libraries(xmrig jansson ${EXTRA_LIBS})
