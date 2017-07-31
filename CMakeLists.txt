@@ -6,7 +6,7 @@ set(HEADERS)
 set(HEADERS_CRYPTO)
 set(SOURCES
     src/Mem.cpp
-    src/xmrig.cpp
+    src/xmrix.cpp
 )
 set(SOURCES_CRYPTO
     src/crypto/c_keccak.c
@@ -33,5 +33,5 @@ include_directories(src)
 include_directories(src/3rdparty)
 include_directories(src/3rdparty/jansson)
 add_subdirectory(src/3rdparty/jansson)
-add_executable(xmrig ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO})
-target_link_libraries(xmrig jansson ${EXTRA_LIBS})
+add_executable(xmrix ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO})
+target_link_libraries(xmrix jansson ${EXTRA_LIBS})

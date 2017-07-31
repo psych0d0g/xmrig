@@ -105,9 +105,10 @@ int main(int argc, char **argv) {
 			nonce[8] = '\0';
 			toHex(m_hash, 32, result);
 			result[64] = '\0';
-			printf("found: nonce=%s result=%s\n", nonce, result);
-			fflush(stdout);
+			//printf("found: nonce=%s result=%s\n", nonce, result);
 		}
+		printf("trying\n");
+		fflush(stdout);
 	}
 
 	//std::cout << "m_blob=" << std::endl << m_blob << std::endl << "m_target=" << std::endl << m_target << std::endl;
