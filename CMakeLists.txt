@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(xmrig)
+project(xmrix)
 
 option(WITH_LIBCPUID "Use Libcpuid" ON)
 option(WITH_AEON     "CryptoNight-Lite support" ON)
@@ -34,9 +34,7 @@ set(HEADERS
     src/Options.h
     src/Summary.h
     src/version.h
-    src/workers/DoubleWorker.h
     src/workers/Handle.h
-    src/workers/Hashrate.h
     src/workers/SingleWorker.h
     src/workers/Worker.h
     src/workers/Workers.h
@@ -71,9 +69,7 @@ set(SOURCES
     src/net/strategies/SinglePoolStrategy.cpp
     src/Options.cpp
     src/Summary.cpp
-    src/workers/DoubleWorker.cpp
     src/workers/Handle.cpp
-    src/workers/Hashrate.cpp
     src/workers/SingleWorker.cpp
     src/workers/Worker.cpp
     src/workers/Workers.cpp
@@ -91,27 +87,6 @@ set(SOURCES_CRYPTO
     src/crypto/CryptoNight.cpp
    )
 
-if (WIN32)
-    set(SOURCES_OS
-        res/app.rc
-        src/3rdparty/winansi.cpp
-        src/3rdparty/winansi.h
-        src/App_win.cpp
-        src/Cpu_win.cpp
-        src/Mem_win.cpp
-        src/net/Network_win.cpp
-        )
-
-    add_definitions(/DWIN32)
-    set(EXTRA_LIBS ws2_32 psapi iphlpapi userenv)
-elseif (APPLE)
-    set(SOURCES_OS
-        src/App_unix.cpp
-        src/Cpu_mac.cpp
-        src/Mem_unix.cpp
-        src/net/Network_mac.cpp
-        )
-else()
     set(SOURCES_OS
         src/App_unix.cpp
         src/Cpu_unix.cpp
@@ -120,7 +95,6 @@ else()
         )
 
     set(EXTRA_LIBS pthread)
-endif()
 
 add_definitions(/DUNICODE)
 #add_definitions(/DAPP_DEBUG)

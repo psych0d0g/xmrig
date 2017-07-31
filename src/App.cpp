@@ -60,10 +60,6 @@ App::App(int argc, char **argv) :
 
     Log::init();
 
-    if (!m_options->background()) {
-        Log::add(new ConsoleLog(m_options->colors()));
-    }
-
     if (m_options->logFile()) {
         Log::add(new FileLog(m_options->logFile()));
     }
@@ -94,13 +90,6 @@ int App::exec()
     uv_signal_start(&m_signal, App::onSignal, SIGHUP);
     uv_signal_start(&m_signal, App::onSignal, SIGTERM);
     uv_signal_start(&m_signal, App::onSignal, SIGINT);
-
-    background();
-
-    if (!CryptoNight::init(m_options->algo(), m_options->algoVariant())) {
-        LOG_ERR("\"%s\" hash self-test failed.", m_options->algoName());
-        return 1;
-    }
 
     Mem::allocate(m_options->algo(), m_options->threads(), m_options->doubleHash());
     Summary::print();

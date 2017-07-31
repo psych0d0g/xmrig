@@ -35,7 +35,6 @@
 
 
 class Handle;
-class Hashrate;
 class IJobResultListener;
 
 
@@ -63,7 +62,6 @@ private:
 
     static bool m_active;
     static bool m_enabled;
-    static Hashrate *m_hashrate;
     static IJobResultListener *m_listener;
     static Job m_job;
     static std::atomic<int> m_paused;

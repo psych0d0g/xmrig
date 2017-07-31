@@ -130,6 +130,7 @@ bool Job::setTarget(const char *target)
         }
 
         m_target = 0xFFFFFFFFFFFFFFFFULL / (0xFFFFFFFFULL / static_cast<uint64_t>(tmp));
+        printf("target=%u tmp=%u m_target=%u\n", target, tmp, m_target);
     }
     else if (len <= 16) {
         m_target = 0;

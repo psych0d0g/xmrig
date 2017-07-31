@@ -27,16 +27,13 @@
 #include "interfaces/IJobResultListener.h"
 #include "Mem.h"
 #include "Options.h"
-#include "workers/DoubleWorker.h"
 #include "workers/Handle.h"
-#include "workers/Hashrate.h"
 #include "workers/SingleWorker.h"
 #include "workers/Workers.h"
 
 
 bool Workers::m_active = false;
 bool Workers::m_enabled = true;
-Hashrate *Workers::m_hashrate = nullptr;
 IJobResultListener *Workers::m_listener = nullptr;
 Job Workers::m_job;
 std::atomic<int> Workers::m_paused;
@@ -95,7 +92,6 @@ void Workers::setJob(const Job &job)
 void Workers::start(int64_t affinity)
 {
     const int threads = Mem::threads();
-    m_hashrate = new Hashrate(threads);
 
     uv_mutex_init(&m_mutex);
     uv_rwlock_init(&m_rwlock);
@@ -118,7 +114,6 @@ void Workers::start(int64_t affinity)
 void Workers::stop()
 {
     uv_timer_stop(&m_timer);
-    m_hashrate->stop();
 
     uv_close(reinterpret_cast<uv_handle_t*>(&m_async), nullptr);
     m_sequence = 0;
@@ -142,12 +137,7 @@ void Workers::submit(const JobResult &result)
 void Workers::onReady(void *arg)
 {
     auto handle = static_cast<Handle*>(arg);
-    if (Mem::isDoubleHash()) {
-        handle->setWorker(new DoubleWorker(handle));
-    }
-    else {
-        handle->setWorker(new SingleWorker(handle));
-    }
+    handle->setWorker(new SingleWorker(handle));
 
     handle->worker()->start();
 }
@@ -179,10 +169,6 @@ void Workers::onTick(uv_timer_t *handle)
             return;
         }
 
-        m_hashrate->add(handle->threadId(), handle->worker()->hashCount(), handle->worker()->timestamp());
     }
 
-    if ((m_ticks++ & 0xF) == 0)  {
-        m_hashrate->updateHighest();
-    }
 }

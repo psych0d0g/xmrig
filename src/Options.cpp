@@ -182,11 +182,6 @@ Options::Options(int argc, char **argv) :
         return;
     }
 
-    m_algoVariant = getAlgoVariant();
-    if (m_algoVariant == AV2_AESNI_DOUBLE || m_algoVariant == AV4_SOFT_AES_DOUBLE) {
-        m_doubleHash = true;
-    }
-
     if (!m_threads) {
         m_threads = Cpu::optimalThreadsCount(m_algo, m_doubleHash, m_maxCpuUsage);
     }
