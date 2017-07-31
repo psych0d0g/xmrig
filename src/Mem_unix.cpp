@@ -28,7 +28,6 @@
 
 
 #include "crypto/CryptoNight.h"
-#include "log/Log.h"
 #include "Mem.h"
 #include "Options.h"
 
@@ -54,7 +53,6 @@ bool Mem::allocate(int algo, int threads, bool doubleHash)
     m_flags |= HugepagesEnabled;
 
     if (madvise(m_memory, size, MADV_RANDOM | MADV_WILLNEED) != 0) {
-        LOG_ERR("madvise failed");
     }
 
     if (mlock(m_memory, size) == 0) {

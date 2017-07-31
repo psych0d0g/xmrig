@@ -25,8 +25,8 @@
 #include <iterator>
 #include <string.h>
 #include <utility>
+#include <vector>
 
-#include "log/Log.h"
 #include "interfaces/IClientListener.h"
 #include "net/Client.h"
 #include "net/Url.h"
@@ -91,9 +91,7 @@ Client::~Client()
  */
 int64_t Client::send(char *data, size_t size)
 {
-    LOG_DEBUG("[%s:%u] send (%d bytes): \"%s\"", m_url.host(), m_url.port(), size ? size : strlen(data), data);
     if (state() != ConnectedState) {
-        LOG_DEBUG_ERR("[%s:%u] send failed, invalid state: %d", m_url.host(), m_url.port(), m_state);
         return -1;
     }
 
@@ -202,7 +200,6 @@ bool Client::parseJob(const json_t *params, int *code)
     }
 
     if (m_job == job) {
-        LOG_WARN("[%s:%u] duplicate job received, ignore", m_url.host(), m_url.port());
         return false;
     }
 
@@ -239,7 +236,6 @@ int Client::resolve(const char *host)
     const int r = uv_getaddrinfo(uv_default_loop(), &m_resolver, Client::onResolved, host, NULL, &m_hints);
     if (r) {
         if (!m_quiet) {
-            LOG_ERR("[%s:%u] getaddrinfo error: \"%s\"", host, m_url.port(), uv_strerror(r));
         }
         return 1;
     }
@@ -318,14 +314,12 @@ void Client::parse(char *line, size_t len)
 
     line[len - 1] = '\0';
 
-    LOG_DEBUG("[%s:%u] received (%d bytes): \"%s\"", m_url.host(), m_url.port(), len, line);
 
     json_error_t err;
     json_t *val = json_loads(line, 0, &err);
 
     if (!val) {
         if (!m_quiet) {
-            LOG_ERR("[%s:%u] JSON decode failed: \"%s\"", m_url.host(), m_url.port(), err.text);
         }
         return;
     }
@@ -346,7 +340,6 @@ void Client::parseNotification(const char *method, const json_t *params, const j
 {
     if (json_is_object(error)) {
         if (!m_quiet) {
-            LOG_ERR("[%s:%u] error: \"%s\", code: %" PRId64, m_url.host(), m_url.port(), json_string_value(json_object_get(error, "message")), json_integer_value(json_object_get(error, "code")));
         }
         return;
     }
@@ -364,7 +357,6 @@ void Client::parseNotification(const char *method, const json_t *params, const j
         return;
     }
 
-    LOG_WARN("[%s:%u] unsupported method: \"%s\"", m_url.host(), m_url.port(), method);
 }
 
 
@@ -379,7 +371,6 @@ void Client::parseResponse(int64_t id, const json_t *result, const json_t *error
             m_results.erase(it);
         }
         else if (!m_quiet) {
-            LOG_ERR("[%s:%u] error: \"%s\", code: %" PRId64, m_url.host(), m_url.port(), message, json_integer_value(json_object_get(error, "code")));
         }
 
         if (id == 1 || (message && strncasecmp(message, "Unauthenticated", 15) == 0)) {
@@ -397,7 +388,6 @@ void Client::parseResponse(int64_t id, const json_t *result, const json_t *error
         int code = -1;
         if (!parseLogin(result, &code)) {
             if (!m_quiet) {
-                LOG_ERR("[%s:%u] login error code: %d", m_url.host(), m_url.port(), code);
             }
 
             return close();
@@ -448,7 +438,6 @@ void Client::reconnect()
 
 void Client::setState(SocketState state)
 {
-    LOG_DEBUG("[%s:%u] state: %d", m_url.host(), m_url.port(), state);
 
     if (m_state == state) {
         return;
@@ -497,7 +486,6 @@ void Client::onConnect(uv_connect_t *req, int status)
     auto client = getClient(req->data);
     if (status < 0) {
         if (!client->m_quiet) {
-            LOG_ERR("[%s:%u] connect error: \"%s\"", client->m_url.host(), client->m_url.port(), uv_strerror(status));
         }
 
         free(req);
@@ -521,7 +509,6 @@ void Client::onRead(uv_stream_t *stream, ssize_t nread, const uv_buf_t *buf)
     auto client = getClient(stream->data);
     if (nread < 0) {
         if (nread != UV_EOF && !client->m_quiet) {
-            LOG_ERR("[%s:%u] read error: \"%s\"", client->m_url.host(), client->m_url.port(), uv_strerror(nread));
         }
 
         return client->close();;
@@ -560,7 +547,6 @@ void Client::onResolved(uv_getaddrinfo_t *req, int status, struct addrinfo *res)
 {
     auto client = getClient(req->data);
     if (status < 0) {
-        LOG_ERR("[%s:%u] DNS error: \"%s\"", client->m_url.host(), client->m_url.port(), uv_strerror(status));
         return client->reconnect();;
     }
 
@@ -576,7 +562,6 @@ void Client::onResolved(uv_getaddrinfo_t *req, int status, struct addrinfo *res)
     }
 
     if (ipv4.empty()) {
-        LOG_ERR("[%s:%u] DNS error: \"No IPv4 records found\"", client->m_url.host(), client->m_url.port());
         return client->reconnect();
     }
 

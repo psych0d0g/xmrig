@@ -17,9 +17,6 @@ set(HEADERS
     src/interfaces/IStrategy.h
     src/interfaces/IStrategyListener.h
     src/interfaces/IWorker.h
-    src/log/ConsoleLog.h
-    src/log/FileLog.h
-    src/log/Log.h
     src/Mem.h
     src/net/Client.h
     src/net/Job.h
@@ -51,9 +48,6 @@ set(HEADERS_CRYPTO
 
 set(SOURCES
     src/App.cpp
-    src/log/ConsoleLog.cpp
-    src/log/FileLog.cpp
-    src/log/Log.cpp
     src/Mem.cpp
     src/net/Client.cpp
     src/net/Job.cpp
@@ -141,11 +135,6 @@ else()
     add_definitions(/DXMRIG_NO_LIBCPUID)
 endif()
 
-CHECK_INCLUDE_FILE (syslog.h HAVE_SYSLOG_H)
-if (HAVE_SYSLOG_H)
-    add_definitions(/DHAVE_SYSLOG_H)
-    set(SOURCES_SYSLOG src/log/SysLog.h src/log/SysLog.cpp)
-endif()
 
 include_directories(src)
 include_directories(src/3rdparty)
@@ -154,5 +143,5 @@ include_directories(${UV_INCLUDE_DIR})
 
 add_subdirectory(src/3rdparty/jansson)
 
-add_executable(xmrig ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO} ${SOURCES_SYSLOG})
+add_executable(xmrig ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO})
 target_link_libraries(xmrig jansson ${UV_LIBRARIES} ${EXTRA_LIBS} ${CPUID_LIB})
