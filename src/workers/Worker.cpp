@@ -37,7 +37,8 @@ Worker::Worker(Handle *handle) :
     m_count(0),
     m_sequence(0)
 {
-    m_ctx = Mem::create(m_id);
+	//printf("m_id=%i\n", m_id);
+    m_ctx = Mem::create(0);
 }
 
 

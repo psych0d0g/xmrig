@@ -189,12 +189,12 @@ bool Client::parseJob(const json_t *params, int *code)
         return false;
     }
 
-    if (!job.setBlob(json_string_value(json_object_get(params, "blob")))) {
+    if (!job.setBlob("0505f2a6fccb05192f03d2068074a9c590a9c1bd41c5ddbe0db554360d6f35b56830bae23a00e50000be0bd1e778b8bf25072c21b1fda7c2fcb2e1c05ed4e16ecd4f55aadd2f482ad03bdf02")) {
         *code = 4;
         return false;
     }
 
-    if (!job.setTarget(json_string_value(json_object_get(params, "target")))) {
+    if (!job.setTarget("ffff7f00")) {
         *code = 5;
         return false;
     }

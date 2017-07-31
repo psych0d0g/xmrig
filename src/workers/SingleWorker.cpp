@@ -38,6 +38,7 @@ SingleWorker::SingleWorker(Handle *handle)
 
 void SingleWorker::start()
 {
+	uint32_t xnonce;
     while (Workers::sequence() > 0) {
         if (Workers::isPaused()) {
             do {
@@ -49,7 +50,7 @@ void SingleWorker::start()
         }
 
         while (!Workers::isOutdated(m_sequence)) {
-			printf("Trying %u\n", m_result.nonce);
+			//printf("Trying %u\n", m_result.nonce);
             if ((m_count & 0xF) == 0) {
                 storeStats();
             }
@@ -57,9 +58,14 @@ void SingleWorker::start()
             m_count++;
 			if ((m_count & 0xF) == 0) {
             	*m_job.nonce() = m_result.nonce += rand();
+			} else {
+				*m_job.nonce() = ++m_result.nonce;
 			}
+			xnonce = m_result.nonce;
 
+			printf("trying %u...\n", xnonce);
             if (CryptoNight::hash(m_job, m_result, m_ctx)) {
+				printf("found=%u\n", xnonce);
                 Workers::submit(m_result);
 			}
 
