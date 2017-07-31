@@ -28,18 +28,11 @@
 
 #include "App.h"
 #include "crypto/CryptoNight.h"
-#include "log/ConsoleLog.h"
-#include "log/FileLog.h"
-#include "log/Log.h"
 #include "Mem.h"
 #include "net/Network.h"
 #include "Options.h"
 #include "workers/Workers.h"
 
-
-#ifdef HAVE_SYSLOG_H
-#   include "log/SysLog.h"
-#endif
 
 
 App *App::m_self = nullptr;
@@ -54,17 +47,7 @@ App::App(int argc, char **argv) :
 
     m_options = Options::parse(argc, argv);
 
-    Log::init();
 
-    if (m_options->logFile()) {
-        Log::add(new FileLog(m_options->logFile()));
-    }
-
-#   ifdef HAVE_SYSLOG_H
-    if (m_options->syslog()) {
-        Log::add(new SysLog());
-    }
-#   endif
 
     m_network = new Network(m_options);
 
@@ -116,24 +99,6 @@ void App::close()
 
 void App::onSignal(uv_signal_t *handle, int signum)
 {
-    switch (signum)
-    {
-    case SIGHUP:
-        LOG_WARN("SIGHUP received, exiting");
-        break;
-
-    case SIGTERM:
-        LOG_WARN("SIGTERM received, exiting");
-        break;
-
-    case SIGINT:
-        LOG_WARN("SIGINT received, exiting");
-        break;
-
-    default:
-        break;
-    }
-
     uv_signal_stop(handle);
     m_self->close();
 }

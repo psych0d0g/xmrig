@@ -139,7 +139,6 @@ if (WITH_LIBCPUID)
     set(CPUID_LIB cpuid)
 else()
     add_definitions(/DXMRIG_NO_LIBCPUID)
-    set(SOURCES_CPUID src/Cpu_stub.cpp)
 endif()
 
 CHECK_INCLUDE_FILE (syslog.h HAVE_SYSLOG_H)
