@@ -34,8 +34,6 @@
 #include "Mem.h"
 #include "net/Network.h"
 #include "Options.h"
-#include "Summary.h"
-#include "version.h"
 #include "workers/Workers.h"
 
 
@@ -90,7 +88,6 @@ int App::exec()
     uv_signal_start(&m_signal, App::onSignal, SIGINT);
 
     Mem::allocate(m_options->algo(), m_options->threads(), m_options->doubleHash());
-    Summary::print();
 
     Workers::start(m_options->affinity());
 

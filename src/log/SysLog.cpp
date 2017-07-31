@@ -26,7 +26,6 @@
 
 
 #include "log/SysLog.h"
-#include "version.h"
 
 
 SysLog::SysLog(){}

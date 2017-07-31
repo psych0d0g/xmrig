@@ -89,16 +89,6 @@ Url::~Url()
 }
 
 
-bool Url::isNicehash() const
-{
-    return isValid() && (m_nicehash || strstr(m_host, ".nicehash.com"));
-}
-bool Url::isRandNonce() const
-{
-    return m_randnonce;
-}
-
-
 bool Url::parse(const char *url)
 {
     const char *p = strstr(url, "://");
@@ -132,45 +122,6 @@ bool Url::parse(const char *url)
 }
 
 
-bool Url::setUserpass(const char *userpass)
-{
-    const char *p = strchr(userpass, ':');
-    if (!p) {
-        return false;
-    }
-
-    free(m_user);
-    free(m_password);
-
-    m_user = static_cast<char*>(calloc(p - userpass + 1, 1));
-    strncpy(m_user, userpass, p - userpass);
-    m_password = strdup(p + 1);
-
-    return true;
-}
-
-
-void Url::setPassword(const char *password)
-{
-    if (!password) {
-        return;
-    }
-
-    free(m_password);
-    m_password = strdup(password);
-}
-
-
-void Url::setUser(const char *user)
-{
-    if (!user) {
-        return;
-    }
-
-    free(m_user);
-    m_user = strdup(user);
-}
-
 
 Url &Url::operator=(const Url *other)
 {
@@ -181,9 +132,6 @@ Url &Url::operator=(const Url *other)
 
     free(m_host);
     m_host = strdup(other->m_host);
-
-    setPassword(other->m_password);
-    setUser(other->m_user);
 
     return *this;
 }

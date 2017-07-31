@@ -28,13 +28,13 @@
 #include "Options.h"
 
 
-FailoverStrategy::FailoverStrategy(const std::vector<Url*> &urls, const char *agent, IStrategyListener *listener) :
+FailoverStrategy::FailoverStrategy(const std::vector<Url*> &urls, IStrategyListener *listener) :
     m_active(-1),
     m_index(0),
     m_listener(listener)
 {
     for (const Url *url : urls) {
-        add(url, agent);
+        add(url);
     }
 }
 
@@ -125,9 +125,9 @@ void FailoverStrategy::onResultAccepted(Client *client, int64_t seq, uint32_t di
 }
 
 
-void FailoverStrategy::add(const Url *url, const char *agent)
+void FailoverStrategy::add(const Url *url)
 {
-    Client *client = new Client(m_pools.size(), agent, this);
+    Client *client = new Client(m_pools.size(), this);
     client->setUrl(url);
     client->setRetryPause(Options::i()->retryPause() * 1000);
 

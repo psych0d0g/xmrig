@@ -50,8 +50,6 @@ public:
     inline void setNicehash(bool nicehash)   { m_nicehash = nicehash; }
     inline void setRandNonce(bool randnonce) { m_randnonce = randnonce; }
 
-    bool isNicehash() const;
-    bool isRandNonce() const;
     bool parse(const char *url);
     bool setUserpass(const char *userpass);
     void setPassword(const char *password);

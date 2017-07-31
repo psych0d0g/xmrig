@@ -47,9 +47,8 @@
 int64_t Client::m_sequence = 1;
 
 
-Client::Client(int id, const char *agent, IClientListener *listener) :
+Client::Client(int id, IClientListener *listener) :
     m_quiet(false),
-    m_agent(agent),
     m_listener(listener),
     m_id(id),
     m_retryPause(5000),
@@ -186,7 +185,7 @@ bool Client::parseJob(const json_t *params, int *code)
         return false;
     }
 
-    Job job(m_id, m_url.isNicehash(), m_url.isRandNonce());
+    Job job(m_id);
     if (!job.setId(json_string_value(json_object_get(params, "job_id")))) {
         *code = 3;
         return false;
@@ -299,7 +298,6 @@ void Client::login()
     json_t *params = json_object();
     json_object_set(params, "login", json_string(m_url.user()));
     json_object_set(params, "pass", json_string(m_url.password()));
-    json_object_set(params, "agent", json_string(m_agent));
 
     json_object_set(req, "params", params);
 

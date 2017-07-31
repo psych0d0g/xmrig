@@ -47,8 +47,6 @@ public:
   void connect();
   void stop();
 
-  static char *userAgent();
-
 protected:
   void onActive(Client *client) override;
   void onJob(Client *client, const Job &job) override;
@@ -60,7 +58,6 @@ private:
   void setJob(Client *client, const Job &job);
 
   bool m_donateActive;
-  char *m_agent;
   const Options *m_options;
   IStrategy *m_donate;
   IStrategy *m_strategy;

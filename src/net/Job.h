@@ -38,8 +38,6 @@ public:
     bool setId(const char *id);
     bool setTarget(const char *target);
 
-    inline bool isNicehash() const         { return m_nicehash; }
-    inline bool isRandNonce() const        { return m_randnonce; }
     inline bool isValid() const            { return m_size > 0 && m_diff > 0; }
     inline const char *id() const          { return m_id; }
     inline const uint8_t *blob() const     { return m_blob; }

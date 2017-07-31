@@ -11,7 +11,6 @@ include (CheckIncludeFile)
 set(HEADERS
     src/3rdparty/align.h
     src/App.h
-    src/Cpu.h
     src/interfaces/IClientListener.h
     src/interfaces/IJobResultListener.h
     src/interfaces/ILogBackend.h
@@ -32,8 +31,6 @@ set(HEADERS
     src/net/strategies/FailoverStrategy.h
     src/net/strategies/SinglePoolStrategy.h
     src/Options.h
-    src/Summary.h
-    src/version.h
     src/workers/Handle.h
     src/workers/SingleWorker.h
     src/workers/Worker.h
@@ -68,7 +65,6 @@ set(SOURCES
     src/net/strategies/FailoverStrategy.cpp
     src/net/strategies/SinglePoolStrategy.cpp
     src/Options.cpp
-    src/Summary.cpp
     src/workers/Handle.cpp
     src/workers/SingleWorker.cpp
     src/workers/Worker.cpp
@@ -88,10 +84,7 @@ set(SOURCES_CRYPTO
    )
 
     set(SOURCES_OS
-        src/App_unix.cpp
-        src/Cpu_unix.cpp
         src/Mem_unix.cpp
-        src/net/Network_unix.cpp
         )
 
     set(EXTRA_LIBS pthread)
@@ -148,7 +141,6 @@ if (WITH_LIBCPUID)
 
     include_directories(src/3rdparty/libcpuid)
     set(CPUID_LIB cpuid)
-    set(SOURCES_CPUID src/Cpu.cpp)
 else()
     add_definitions(/DXMRIG_NO_LIBCPUID)
     set(SOURCES_CPUID src/Cpu_stub.cpp)

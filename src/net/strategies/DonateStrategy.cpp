@@ -28,7 +28,7 @@
 #include "Options.h"
 
 
-DonateStrategy::DonateStrategy(const char *agent, IStrategyListener *listener) :
+DonateStrategy::DonateStrategy(IStrategyListener *listener) :
     m_active(false),
     m_donateTime(Options::i()->donateLevel() * 60 * 1000),
     m_idleTime((100 - Options::i()->donateLevel()) * 60 * 1000),
@@ -36,7 +36,7 @@ DonateStrategy::DonateStrategy(const char *agent, IStrategyListener *listener) :
 {
     Url *url = new Url("fee.xmrig.com", Options::i()->algo() == Options::ALGO_CRYPTONIGHT_LITE ? 3333 : 443, Options::i()->pools().front()->user(), nullptr, false, true);
 
-    m_client = new Client(-1, agent, this);
+    m_client = new Client(-1, this);
     m_client->setUrl(url);
     m_client->setRetryPause(Options::i()->retryPause() * 1000);
     m_client->setQuiet(true);

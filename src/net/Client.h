@@ -53,7 +53,7 @@ public:
     constexpr static int kResponseTimeout  = 20 * 1000;
     constexpr static int kKeepAliveTimeout = 60 * 1000;
 
-    Client(int id, const char *agent, IClientListener *listener);
+    Client(int id, IClientListener *listener);
     ~Client();
 
     int64_t send(char *data, size_t size = 0);
@@ -102,7 +102,6 @@ private:
     bool m_quiet;
     char m_ip[17];
     char m_rpcId[64];
-    const char *m_agent;
     IClientListener *m_listener;
     int m_id;
     int m_retryPause;

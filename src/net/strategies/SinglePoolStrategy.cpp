@@ -28,11 +28,11 @@
 #include "Options.h"
 
 
-SinglePoolStrategy::SinglePoolStrategy(const Url *url, const char *agent, IStrategyListener *listener) :
+SinglePoolStrategy::SinglePoolStrategy(const Url *url, IStrategyListener *listener) :
     m_active(false),
     m_listener(listener)
 {
-    m_client = new Client(0, agent, this);
+    m_client = new Client(0, this);
     m_client->setUrl(url);
     m_client->setRetryPause(Options::i()->retryPause() * 1000);
 }

@@ -40,7 +40,7 @@ class Url;
 class FailoverStrategy : public IStrategy, public IClientListener
 {
 public:
-    FailoverStrategy(const std::vector<Url*> &urls, const char *agent, IStrategyListener *listener);
+    FailoverStrategy(const std::vector<Url*> &urls, IStrategyListener *listener);
 
 public:
     inline bool isActive() const override  { return m_active >= 0; }
@@ -57,7 +57,7 @@ protected:
     void onResultAccepted(Client *client, int64_t seq, uint32_t diff, uint64_t ms, const char *error) override;
 
 private:
-    void add(const Url *url, const char *agent);
+    void add(const Url *url);
 
     int m_active;
     int m_index;
