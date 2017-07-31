@@ -24,7 +24,6 @@
 #include <chrono>
 
 
-#include "Cpu.h"
 #include "Mem.h"
 #include "workers/Handle.h"
 #include "workers/Worker.h"
@@ -38,10 +37,6 @@ Worker::Worker(Handle *handle) :
     m_count(0),
     m_sequence(0)
 {
-    if (Cpu::threads() > 1 && handle->affinity() != -1L) {
-        Cpu::setAffinity(m_id, handle->affinity());
-    }
-
     m_ctx = Mem::create(m_id);
 }
 

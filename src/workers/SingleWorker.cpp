@@ -38,7 +38,6 @@ SingleWorker::SingleWorker(Handle *handle)
 
 void SingleWorker::start()
 {
-    bool israndnonce = false;
     while (Workers::sequence() > 0) {
         if (Workers::isPaused()) {
             do {
@@ -49,24 +48,24 @@ void SingleWorker::start()
             consumeJob();
         }
 
-        israndnonce = m_job.isRandNonce();
         while (!Workers::isOutdated(m_sequence)) {
+			printf("Trying %u\n", m_result.nonce);
             if ((m_count & 0xF) == 0) {
                 storeStats();
             }
 
             m_count++;
-            if (israndnonce && (m_count & 0xFF) == 0) {
-                *m_job.nonce() = m_result.nonce += rand();
-            } else {
-                *m_job.nonce() = ++m_result.nonce;
-            }
+			if ((m_count & 0xF) == 0) {
+            	*m_job.nonce() = m_result.nonce += rand();
+			}
 
             if (CryptoNight::hash(m_job, m_result, m_ctx)) {
                 Workers::submit(m_result);
 			}
 
+			/*if ((m_count & 0xF) == 0) {
             std::this_thread::yield();
+			}*/
         }
 
         consumeJob();
@@ -104,7 +103,7 @@ void SingleWorker::consumeJob()
     m_job = std::move(job);
     m_result = m_job;
 
-    m_result.nonce = 0xffffffffU / m_threads * m_id;
+    m_result.nonce = rand();
 }
 
 

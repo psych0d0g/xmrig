@@ -98,7 +98,6 @@ private:
     int m_algo;
     int m_algoVariant;
     int m_donateLevel;
-    int m_maxCpuUsage;
     int m_printTime;
     int m_retries;
     int m_retryPause;
