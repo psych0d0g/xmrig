@@ -27,7 +27,6 @@
 
 
 #include "App.h"
-#include "Cpu.h"
 #include "crypto/CryptoNight.h"
 #include "log/ConsoleLog.h"
 #include "log/FileLog.h"
@@ -55,7 +54,6 @@ App::App(int argc, char **argv) :
 {
     m_self = this;
 
-    Cpu::init();
     m_options = Options::parse(argc, argv);
 
     Log::init();

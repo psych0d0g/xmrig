@@ -26,7 +26,6 @@
 #include <uv.h>
 
 
-#include "Cpu.h"
 #include "log/Log.h"
 #include "Mem.h"
 #include "net/Url.h"
@@ -66,27 +65,6 @@ static void print_memory() {
     }
     else {
         Log::i()->text(" * HUGE PAGES:   %s, %s", Mem::isHugepagesAvailable() ? "available" : "unavailable", Mem::isHugepagesEnabled() ? "enabled" : "disabled");
-    }
-}
-
-
-static void print_cpu()
-{
-    if (Options::i()->colors()) {
-        Log::i()->text("\x1B[01;32m * \x1B[01;37mCPU:          %s (%d) %sx64 %sAES-NI",
-                       Cpu::brand(),
-                       Cpu::sockets(),
-                       Cpu::isX64() ? "\x1B[01;32m" : "\x1B[01;31m-",
-                       Cpu::hasAES() ? "\x1B[01;32m" : "\x1B[01;31m-");
-#       ifndef XMRIG_NO_LIBCPUID
-        Log::i()->text("\x1B[01;32m * \x1B[01;37mCPU L2/L3:    %.1f MB/%.1f MB", Cpu::l2() / 1024.0, Cpu::l3() / 1024.0);
-#       endif
-    }
-    else {
-        Log::i()->text(" * CPU:          %s (%d) %sx64 %sAES-NI", Cpu::brand(), Cpu::sockets(), Cpu::isX64() ? "" : "-", Cpu::hasAES() ? "" : "-");
-#       ifndef XMRIG_NO_LIBCPUID
-        Log::i()->text(" * CPU L2/L3:    %.1f MB/%.1f MB", Cpu::l2() / 1024.0, Cpu::l3() / 1024.0);
-#       endif
     }
 }
 
@@ -134,7 +112,6 @@ void Summary::print()
 {
     print_versions();
     print_memory();
-    print_cpu();
     print_threads();
     print_pools();
 }
