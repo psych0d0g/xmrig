@@ -67,8 +67,6 @@ bool setTarget(const char *target) {
 int main(int argc, char **argv) {
 
 	std::random_device rd;
-	const char *blob = argv[1];
-	const char *target = argv[2];
 	int tid = 0;
 	int algo = 0;
 	int threads = 1;
@@ -96,7 +94,7 @@ int main(int argc, char **argv) {
 			toHex(m_hash, 32, result);
 			nonce[8] = '\0';
 			result[64] = '\0';
-			printf("%s %s\n", found, result);
+			printf("%s %s\n", nonce, result);
 			fflush(stdout);
 		}
 	}
