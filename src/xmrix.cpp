@@ -67,32 +67,23 @@ bool setTarget(const char *target) {
 int main(int argc, char **argv) {
 
 	std::random_device rd;
-
 	const char *blob = argv[1];
 	const char *target = argv[2];
-
-	setBlob(blob);
-	setTarget(target);
-
-	*m_nonce() = rand();
-
 	int tid = 0;
-
 	int algo = 0;
 	int threads = 1;
 	int doublehash = false;
-
-	Mem::allocate(algo, threads, doublehash);
-
-	m_ctx = Mem::create(tid);
-
 	uint8_t m_hash[64];
 	char nonce[9];
 	char result[65];
-
 	unsigned short int counter = 0;
 	uint32_t l_nonce = 0;
 
+	setBlob(argv[1]);
+	setTarget(argv[2]);
+	*m_nonce() = rd();
+	Mem::allocate(algo, threads, doublehash);
+	m_ctx = Mem::create(tid);
 	while (true) {
 		if ((counter++ % 64) == 0) {
 			*m_nonce() = l_nonce += rd();
@@ -102,18 +93,13 @@ int main(int argc, char **argv) {
 		CryptoNight::hashx(m_blob, m_size, m_hash, m_ctx);
 		if (*reinterpret_cast<uint64_t*>(m_hash + 24) < m_target) {
 			toHex(reinterpret_cast<const unsigned char*>(m_nonce()), 4, nonce);
-			nonce[8] = '\0';
 			toHex(m_hash, 32, result);
+			nonce[8] = '\0';
 			result[64] = '\0';
-			//printf("found: nonce=%s result=%s\n", nonce, result);
+			printf("%s %s\n", found, result);
+			fflush(stdout);
 		}
-		printf("trying\n");
-		fflush(stdout);
 	}
-
-	//std::cout << "m_blob=" << std::endl << m_blob << std::endl << "m_target=" << std::endl << m_target << std::endl;
-
 	Mem::release();
-
     return 0;
 }
