@@ -89,7 +89,7 @@ void Workers::setJob(const Job &job, bool donate)
     m_job = job;
 
     if (donate) {
-        m_job.setPoolId(-1);
+        m_job.setId(-1);
     }
     uv_rwlock_wrunlock(&m_rwlock);
 
