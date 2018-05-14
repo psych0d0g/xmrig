@@ -263,20 +263,16 @@ bool Client::parseJob(const rapidjson::Value &params, int *code)
         return false;
     }
 
-<<<<<<< HEAD
 #   ifdef XMRIG_PROXY_PROJECT
     Job job(m_id, m_url.variant());
     job.setClientId(m_rpcId);
     job.setCoin(m_url.coin());
 #   else
-    Job job(m_id, m_nicehash, m_url.algo(), m_url.variant());
+    Job job(m_id, m_nicehash, m_url.algo(), m_url.variant(), m_url.isRandNonce());
 #   endif
 
     if (!job.setId(params["job_id"].GetString())) {
-=======
-    Job job(m_id, m_url.isNicehash(), m_url.isRandNonce());
-    if (!job.setId(json_string_value(json_object_get(params, "job_id")))) {
->>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
+
         *code = 3;
         return false;
     }
