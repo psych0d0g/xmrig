@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 #include "net/Url.h"
 #include "xmrig.h"
 
@@ -39,6 +38,7 @@
 Url::Url() :
     m_keepAlive(false),
     m_nicehash(false),
+    m_randnonce(false),
     m_host(nullptr),
     m_password(nullptr),
     m_user(nullptr),
@@ -64,6 +64,7 @@ Url::Url() :
 Url::Url(const char *url) :
     m_keepAlive(false),
     m_nicehash(false),
+    m_randnonce(false),
     m_host(nullptr),
     m_password(nullptr),
     m_user(nullptr),
@@ -76,9 +77,14 @@ Url::Url(const char *url) :
 }
 
 
+<<<<<<< HEAD
 Url::Url(const char *host, uint16_t port, const char *user, const char *password, bool keepAlive, bool nicehash, int variant) :
+=======
+Url::Url(const char *host, uint16_t port, const char *user, const char *password, bool keepAlive, bool nicehash, bool randnonce) :
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
     m_keepAlive(keepAlive),
     m_nicehash(nicehash),
+    m_randnonce(randnonce),
     m_password(password ? strdup(password) : nullptr),
     m_user(user ? strdup(user) : nullptr),
     m_algo(xmrig::ALGO_CRYPTONIGHT),
@@ -99,6 +105,10 @@ Url::~Url()
     if (m_url) {
         delete [] m_url;
     }
+}
+bool Url::isRandNonce() const
+{
+    return m_randnonce;
 }
 
 
@@ -245,6 +255,7 @@ Url &Url::operator=(const Url *other)
     m_algo      = other->m_algo;
     m_variant   = other->m_variant;
     m_nicehash  = other->m_nicehash;
+    m_randnonce = other->m_randnonce;
     m_port      = other->m_port;
 
     free(m_host);

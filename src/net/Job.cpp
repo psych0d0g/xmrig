@@ -56,6 +56,7 @@ static inline char hf_bin2hex(unsigned char c)
 }
 
 
+<<<<<<< HEAD
 Job::Job() :
     m_nicehash(false),
     m_coin(),
@@ -75,6 +76,11 @@ Job::Job(int poolId, bool nicehash, int algo, int variant) :
     m_nicehash(nicehash),
     m_coin(),
     m_algo(algo),
+=======
+Job::Job(int poolId, bool nicehash, bool randnonce) :
+    m_nicehash(nicehash),
+    m_randnonce(randnonce),
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
     m_poolId(poolId),
     m_threadId(-1),
     m_variant(variant),

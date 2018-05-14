@@ -37,7 +37,11 @@ public:
 
     Url();
     Url(const char *url);
+<<<<<<< HEAD
     Url(const char *host, uint16_t port, const char *user = nullptr, const char *password = nullptr, bool keepAlive = false, bool nicehash = false, int variant = -1);
+=======
+    Url(const char *host, uint16_t port, const char *user = nullptr, const char *password = nullptr, bool keepAlive = false, bool nicehash = false, bool randnonce = false  );
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
     ~Url();
 
     inline bool isKeepAlive() const          { return m_keepAlive; }
@@ -51,8 +55,15 @@ public:
     inline uint16_t port() const             { return m_port; }
     inline void setKeepAlive(bool keepAlive) { m_keepAlive = keepAlive; }
     inline void setNicehash(bool nicehash)   { m_nicehash = nicehash; }
+<<<<<<< HEAD
     inline void setVariant(bool monero)      { m_variant = monero; }
 
+=======
+    inline void setRandNonce(bool randnonce) { m_randnonce = randnonce; }
+
+    bool isNicehash() const;
+    bool isRandNonce() const;
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
     bool parse(const char *url);
     bool setUserpass(const char *userpass);
     const char *url() const;
@@ -69,6 +80,7 @@ private:
 
     bool m_keepAlive;
     bool m_nicehash;
+    bool m_randnonce;
     char *m_host;
     char *m_password;
     char *m_user;

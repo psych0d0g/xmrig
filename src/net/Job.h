@@ -29,24 +29,33 @@
 #include <stddef.h>
 #include <stdint.h>
 
+<<<<<<< HEAD
 
 #include "net/Id.h"
 #include "xmrig.h"
+=======
+#include "align.h"
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
 
 
 class Job
 {
 public:
+<<<<<<< HEAD
     Job();
     Job(int poolId, bool nicehash, int algo, int variant);
     ~Job();
 
+=======
+    Job(int poolId = -2, bool nicehash = false, bool randnonce = false);
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
     bool setBlob(const char *blob);
     bool setTarget(const char *target);
     void setCoin(const char *coin);
     void setVariant(int variant);
 
     inline bool isNicehash() const         { return m_nicehash; }
+    inline bool isRandNonce() const        { return m_randnonce; }
     inline bool isValid() const            { return m_size > 0 && m_diff > 0; }
     inline bool setId(const char *id)      { return m_id.setId(id); }
     inline const char *coin() const        { return m_coin; }
@@ -61,8 +70,17 @@ public:
     inline uint32_t diff() const           { return (uint32_t) m_diff; }
     inline uint64_t target() const         { return m_target; }
     inline void setNicehash(bool nicehash) { m_nicehash = nicehash; }
+<<<<<<< HEAD
     inline void setPoolId(int poolId)      { m_poolId = poolId; }
     inline void setThreadId(int threadId)  { m_threadId = threadId; }
+=======
+    inline void setRandNonce(bool randnonce) { m_randnonce = randnonce; }
+
+#   ifdef XMRIG_PROXY_PROJECT
+    inline char *rawBlob()                 { return m_rawBlob; }
+    inline const char *rawTarget() const   { return m_rawTarget; }
+#   endif
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
 
     static bool fromHex(const char* in, unsigned int len, unsigned char* out);
     static inline uint32_t *nonce(uint8_t *blob)   { return reinterpret_cast<uint32_t*>(blob + 39); }
@@ -74,8 +92,12 @@ public:
 
 private:
     bool m_nicehash;
+<<<<<<< HEAD
     char m_coin[5];
     int m_algo;
+=======
+    bool m_randnonce;
+>>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
     int m_poolId;
     int m_threadId;
     int m_variant;
