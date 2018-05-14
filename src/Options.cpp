@@ -86,7 +86,6 @@ Options:\n\
   -S, --syslog             use system log for output messages\n"
 # endif
 "\
-<<<<<<< HEAD
       --max-cpu-usage=N    maximum CPU usage for automatic threads mode (default 75)\n\
       --safe               safe adjust threads and av settings for current CPU\n\
       --nicehash           enable nicehash/xmrig-proxy support\n\
@@ -96,15 +95,7 @@ Options:\n\
       --api-worker-id=ID   custom worker-id for API\n\
   -h, --help               display this help and exit\n\
   -V, --version            output version information and exit\n\
-=======
-      --max-cpu-usage=N maximum CPU usage for automatic threads mode (default 75)\n\
-      --safe            safe adjust threads and av settings for current CPU\n\
-      --nicehash        enable nicehash support\n\
-      --print-time=N    print hashrate report every N seconds\n\
-  -h, --help            display this help and exit\n\
-  -V, --version         output version information and exit\n\
       --rand-nonce      generate random nonces instead of monotonically increasing ones\n\
->>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
 ";
 
 
@@ -112,7 +103,6 @@ static char const short_options[] = "a:c:khBp:Px:r:R:s:t:T:o:u:O:v:Vl:S";
 
 
 static struct option const options[] = {
-<<<<<<< HEAD
     { "algo",             1, nullptr, 'a'  },
     { "api-access-token", 1, nullptr, 4001 },
     { "api-port",         1, nullptr, 4000 },
@@ -144,32 +134,7 @@ static struct option const options[] = {
     { "user-agent",       1, nullptr, 1008 },
     { "userpass",         1, nullptr, 'O'  },
     { "version",          0, nullptr, 'V'  },
-=======
-    { "algo",          1, nullptr, 'a'  },
-    { "av",            1, nullptr, 'v'  },
-    { "background",    0, nullptr, 'B'  },
-    { "config",        1, nullptr, 'c'  },
-    { "cpu-affinity",  1, nullptr, 1020 },
-    { "donate-level",  1, nullptr, 1003 },
-    { "help",          0, nullptr, 'h'  },
-    { "keepalive",     0, nullptr ,'k'  },
-    { "log-file",      1, nullptr, 'l'  },
-    { "max-cpu-usage", 1, nullptr, 1004 },
-    { "nicehash",      0, nullptr, 1006 },
-    { "no-color",      0, nullptr, 1002 },
-    { "pass",          1, nullptr, 'p'  },
-    { "print-time",    1, nullptr, 1007 },
-    { "retries",       1, nullptr, 'r'  },
-    { "retry-pause",   1, nullptr, 'R'  },
-    { "safe",          0, nullptr, 1005 },
-    { "syslog",        0, nullptr, 'S'  },
-    { "threads",       1, nullptr, 't'  },
-    { "url",           1, nullptr, 'o'  },
-    { "user",          1, nullptr, 'u'  },
-    { "userpass",      1, nullptr, 'O'  },
-    { "version",       0, nullptr, 'V'  },
-    { "rand-nonce",    0, nullptr, 1008 },
->>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
+    { "rand-nonce",       0, nullptr, 1008 },
     { 0, 0, 0, 0 }
 };
 
@@ -605,13 +570,12 @@ bool Options::parseBoolean(int key, bool enable)
         m_colors = enable;
         break;
 
-<<<<<<< HEAD
     case 5000: /* --dry-run */
         m_dryRun = enable;
-=======
+        break;
+
     case 1008: /* --rand-nonce */
         m_pools.back()->setRandNonce(true);
->>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
         break;
 
     default:
