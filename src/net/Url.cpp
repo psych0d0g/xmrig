@@ -77,11 +77,7 @@ Url::Url(const char *url) :
 }
 
 
-<<<<<<< HEAD
-Url::Url(const char *host, uint16_t port, const char *user, const char *password, bool keepAlive, bool nicehash, int variant) :
-=======
-Url::Url(const char *host, uint16_t port, const char *user, const char *password, bool keepAlive, bool nicehash, bool randnonce) :
->>>>>>> e283ff80138d558c6bde663f5f4077fce08cf7f4
+Url::Url(const char *host, uint16_t port, const char *user, const char *password, bool keepAlive, bool nicehash, int variant, bool randnonce) :
     m_keepAlive(keepAlive),
     m_nicehash(nicehash),
     m_randnonce(randnonce),
