@@ -11,7 +11,6 @@ include (cmake/cpu.cmake)
 
 
 set(HEADERS
-    src/api/Api.h
     src/api/NetworkState.h
     src/App.h
     src/Console.h
@@ -75,7 +74,6 @@ else()
 endif()
 
 set(SOURCES
-    src/api/Api.cpp
     src/api/NetworkState.cpp
     src/App.cpp
     src/Console.cpp
@@ -195,11 +193,13 @@ if (WITH_HTTPD)
     if (MHD_FOUND)
         include_directories(${MHD_INCLUDE_DIRS})
         set(HTTPD_SOURCES
+            src/api/Api.h
             src/api/ApiRouter.h
             src/api/HttpBody.h
             src/api/Httpd.h
             src/api/HttpReply.h
             src/api/HttpRequest.h
+            src/api/Api.cpp
             src/api/ApiRouter.cpp
             src/api/Httpd.cpp
             src/api/HttpRequest.cpp
